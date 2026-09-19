@@ -1,3 +1,7 @@
+function formatCurrency(value) {
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+}
+
 function simularInvestimento() {
     const aporteInicial = parseFloat(document.getElementById('aporteInicial').value);
     const meses = parseInt(document.getElementById('meses').value);
@@ -5,7 +9,7 @@ function simularInvestimento() {
     const taxaJurosAnual = parseFloat(document.getElementById('taxaJuros').value);
 
     if(isNaN(aporteInicial) || isNaN(meses) || isNaN(aporteMensal) || isNaN(taxaJurosAnual)) {
-        alert("Por favor, preencha todos os campos com valores numéricos.");
+        alert("Por favor, preencha todos os campos com valores numéricos válidos.");
         return;
     }
 
@@ -14,28 +18,45 @@ function simularInvestimento() {
     let totalInvestido = aporteInicial;
     let totalJuros = 0;
 
-    let resultadoHTML = '<ul id="resultado-lista">';
-        for(let i = 1; i <= meses; i++) {
-            const rendimentoMensal = totalInvestido * taxaJurosMensal;
-            totalInvestido += rendimentoMensal;
-            totalInvestido += aporteMensal;
-            totalJuros += rendimentoMensal;
+    let resultadoHTML = '<h2>Rendimento Mês a Mês</h2>';
+    resultadoHTML += '<ul id="resultado-lista">';
 
-            resultadoHTML += `<li>Mês ${i}: R$ ${totalInvestido.toFixed(2)}</li>`
-        }
+    for(let i = 1; i <= meses; i++) {
+        const rendimentoMensal = totalInvestido * taxaJurosMensal;
+        totalInvestido += rendimentoMensal;
+        totalInvestido += aporteMensal;
+        totalJuros += rendimentoMensal;
 
-    resultadoHTML += '</ul>'
+        resultadoHTML += `<li>Mês ${i}: ${formatCurrency(totalInvestido)}</li>`;
+    }
 
-    const totalAportes = (aporteInicial + aporteMensal * meses).toFixed(2);
+    resultadoHTML += '</ul>';
 
-    //Adicionar informações adicionais
+    const totalAportes = (aporteInicial + aporteMensal * meses);
+
+    // Adicionar informações adicionais com as cores semânticas
+    // text-primary (azul - montante total)
+    // text-danger (vermelho para pagamentos/aportes do bolso, indicando saída de caixa)
+    // text-success (verde para lucros obtidos por juros)
     resultadoHTML += `
+        <h2>Resumo</h2>
         <div id="informacoes-finais">
-            <p>Total Final: R$ ${totalInvestido.toFixed(2)}</p>
-            <p>Total Investido: R$ ${totalAportes}</p>
-            <p>Total Ganho em Juros: R$ ${totalJuros.toFixed(2)}</p>
+            <p>
+                <span>Total Bruto:</span>
+                <span class="text-primary">${formatCurrency(totalInvestido)}</span>
+            </p>
+            <p>
+                <span>Total Investido:</span>
+                <span class="text-danger">${formatCurrency(totalAportes)}</span>
+            </p>
+            <p>
+                <span>Total Ganho em Juros:</span>
+                <span class="text-success">${formatCurrency(totalJuros)}</span>
+            </p>
         </div>
-    `
+    `;
 
-    document.getElementById("resultado-container").innerHTML = resultadoHTML;
+    const container = document.getElementById("resultado-container");
+    container.innerHTML = resultadoHTML;
+    container.classList.remove("hidden");
 }

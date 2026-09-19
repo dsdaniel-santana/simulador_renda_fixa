@@ -1,48 +1,192 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-color: #f4f4f4;
+/* Variáveis de Cores Tema Escuro (Windows-like) */
+:root {
+    --bg-color: #1e1e1e; /* Fundo escuro */
+    --container-bg: #2d2d30; /* Fundo dos containers (estilo janela Windows) */
+    --text-color: #ffffff; /* Texto claro */
+    --text-muted: #cccccc;
+    --border-color: #3e3e42;
+    --input-bg: #333337;
+    --input-focus-border: #0078d7; /* Azul Windows clássico para highlight/credito */
+
+    /* Cores Semânticas solicitadas */
+    --color-primary: #0078d7; /* Azul para crédito/principal */
+    --color-success: #4caf50; /* Verde para lucro */
+    --color-danger: #f44336;  /* Vermelho para pagamento/perda */
 }
 
-.container {
-    text-align: center;
-    background-color: #fff;
+/* Reset Básico */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    /* Segoe UI é a fonte nativa do Windows, garantindo aparência de Windows sem dependências externas */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
     padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Container Centralizado */
+.container {
+    background-color: var(--container-bg);
+    width: 100%;
+    max-width: 600px;
+    padding: 30px;
+    border-radius: 8px; /* Cantos levemente arredondados (Win 11 style) */
+    border: 1px solid var(--border-color);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+    text-align: center;
+}
+
+h1 {
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-bottom: 25px;
+    color: var(--text-color);
+}
+
+h2 {
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    color: var(--text-color);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 5px;
+}
+
+/* Grupos de Formulário */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+label {
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
 }
 
 input {
-    padding: 8px;
-    margin: 8px;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    padding: 10px;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
 }
 
+input:focus {
+    border-color: var(--input-focus-border);
+}
+
+/* Botão Estilo Windows */
 button {
-    padding: 10px;
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    padding: 12px 20px;
     margin-top: 10px;
+    width: 100%;
+    font-size: 1rem;
+    font-family: inherit;
+    border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.2s;
 }
 
-/* Adicione o estilo para o contêiner de resultados */
+button:hover {
+    background-color: #005a9e; /* Azul Windows escurecido no hover */
+}
+
+/* Container de Resultados */
 .resultado-container {
-    max-height: 700px; /* Ajuste conforme necessário */
-    overflow-y: auto;
-    border: 1px solid #ccc; /* Adicione uma borda para delimitar o contêiner */
-    padding: 10px;
+    margin-top: 25px;
+    text-align: left;
+}
+
+.resultado-container.hidden {
+    display: none;
 }
 
 #resultado-lista {
     list-style: none;
     padding: 0;
+    max-height: 250px;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: var(--input-bg);
+    margin-bottom: 20px;
+}
+
+/* Custom scrollbar para Windows feel no dark mode */
+#resultado-lista::-webkit-scrollbar {
+    width: 10px;
+}
+#resultado-lista::-webkit-scrollbar-track {
+    background: var(--input-bg);
+}
+#resultado-lista::-webkit-scrollbar-thumb {
+    background: #686868;
+    border-radius: 4px;
+}
+#resultado-lista::-webkit-scrollbar-thumb:hover {
+    background: #9e9e9e;
 }
 
 #resultado-lista li {
-    background-color: #f9f9f9;
-    margin: 5px 0;
-    padding: 8px;
-    border-radius: 3px;
+    padding: 10px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.9rem;
+}
+#resultado-lista li:last-child {
+    border-bottom: none;
+}
+
+/* Informações Finais (Painel de Resumo) */
+#informacoes-finais {
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 15px;
+    font-size: 1rem;
+}
+
+#informacoes-finais p {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+#informacoes-finais p:last-child {
+    margin-bottom: 0;
+}
+
+/* Classes utilitárias de cores */
+.text-primary {
+    color: var(--color-primary);
+    font-weight: bold;
+}
+
+.text-success {
+    color: var(--color-success);
+    font-weight: bold;
+}
+
+.text-danger {
+    color: var(--color-danger);
+    font-weight: bold;
 }
