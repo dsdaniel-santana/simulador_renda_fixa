@@ -1,17 +1,41 @@
-/* Variáveis de Cores Tema Escuro (Windows-like) */
+/* Variáveis de Cores Modo Claro (Padrão) */
 :root {
-    --bg-color: #1e1e1e; /* Fundo escuro */
-    --container-bg: #2d2d30; /* Fundo dos containers (estilo janela Windows) */
-    --text-color: #ffffff; /* Texto claro */
+    --bg-color: #f3f3f3;
+    --container-bg: #ffffff;
+    --text-color: #000000;
+    --text-muted: #5c5c5c;
+    --border-color: #cccccc;
+    --input-bg: #ffffff;
+    --input-focus-border: #0078d7;
+    --input-disabled-bg: #e6e6e6;
+
+    /* Cores Semânticas solicitadas */
+    --color-primary: #0078d7;
+    --color-primary-hover: #005a9e;
+    --color-secondary: #e1e1e1;
+    --color-secondary-hover: #c8c8c8;
+    --color-secondary-text: #000000;
+    --color-success: #107c10; /* Verde Windows mais visível no claro */
+    --color-danger: #d13438;  /* Vermelho Windows mais visível no claro */
+}
+
+/* Variáveis de Cores Tema Escuro (Windows-like) - Ativado pela classe dark-mode no body */
+body.dark-mode {
+    --bg-color: #1e1e1e;
+    --container-bg: #2d2d30;
+    --text-color: #ffffff;
     --text-muted: #cccccc;
     --border-color: #3e3e42;
     --input-bg: #333337;
-    --input-focus-border: #0078d7; /* Azul Windows clássico para highlight/credito */
+    --input-disabled-bg: #252526;
 
-    /* Cores Semânticas solicitadas */
-    --color-primary: #0078d7; /* Azul para crédito/principal */
-    --color-success: #4caf50; /* Verde para lucro */
-    --color-danger: #f44336;  /* Vermelho para pagamento/perda */
+    --color-primary: #0078d7;
+    --color-primary-hover: #005a9e;
+    --color-secondary: #3e3e42;
+    --color-secondary-hover: #4e4e52;
+    --color-secondary-text: #ffffff;
+    --color-success: #4caf50;
+    --color-danger: #f44336;
 }
 
 /* Reset Básico */
@@ -22,7 +46,6 @@
 }
 
 body {
-    /* Segoe UI é a fonte nativa do Windows, garantindo aparência de Windows sem dependências externas */
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--bg-color);
     color: var(--text-color);
@@ -31,6 +54,71 @@ body {
     align-items: center;
     min-height: 100vh;
     padding: 20px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Toggle de Tema */
+.theme-switch-wrapper {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+}
+
+#theme-label {
+    margin-left: 10px;
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+.theme-switch {
+    display: inline-block;
+    height: 24px;
+    position: relative;
+    width: 44px;
+}
+
+.theme-switch input {
+    display: none;
+}
+
+.slider {
+    background-color: #ccc;
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+}
+
+.slider:before {
+    background-color: #fff;
+    bottom: 3px;
+    content: "";
+    height: 18px;
+    left: 3px;
+    position: absolute;
+    transition: .4s;
+    width: 18px;
+}
+
+input:checked + .slider {
+    background-color: var(--color-primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+.slider.round {
+    border-radius: 24px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
 }
 
 /* Container Centralizado */
@@ -39,17 +127,21 @@ body {
     width: 100%;
     max-width: 600px;
     padding: 30px;
-    border-radius: 8px; /* Cantos levemente arredondados (Win 11 style) */
+    border-radius: 8px;
     border: 1px solid var(--border-color);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
     text-align: center;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+body.dark-mode .container {
+    box-shadow: 0 8px 16px rgba(0,0,0,0.5);
 }
 
 h1 {
     font-size: 1.5rem;
     font-weight: 400;
     margin-bottom: 25px;
-    color: var(--text-color);
 }
 
 h2 {
@@ -57,7 +149,6 @@ h2 {
     font-weight: 400;
     margin-top: 20px;
     margin-bottom: 15px;
-    color: var(--text-color);
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 5px;
 }
@@ -76,6 +167,16 @@ label {
     color: var(--text-muted);
 }
 
+/* Inputs e remoção das setas (se sobrar algum type=number) */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
 input {
     background-color: var(--input-bg);
     color: var(--text-color);
@@ -85,21 +186,35 @@ input {
     font-family: inherit;
     font-size: 1rem;
     outline: none;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s, background-color 0.3s, color 0.3s;
 }
 
 input:focus {
     border-color: var(--input-focus-border);
 }
 
-/* Botão Estilo Windows */
+input:disabled {
+    background-color: var(--input-disabled-bg);
+    color: var(--text-muted);
+    cursor: not-allowed;
+    border-color: var(--border-color);
+}
+
+/* Botões */
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.button-group.hidden {
+    display: none;
+}
+
 button {
-    background-color: var(--color-primary);
-    color: white;
+    flex: 1;
     border: none;
     padding: 12px 20px;
-    margin-top: 10px;
-    width: 100%;
     font-size: 1rem;
     font-family: inherit;
     border-radius: 4px;
@@ -107,8 +222,22 @@ button {
     transition: background-color 0.2s;
 }
 
-button:hover {
-    background-color: #005a9e; /* Azul Windows escurecido no hover */
+.btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-primary-hover);
+}
+
+.btn-secondary {
+    background-color: var(--color-secondary);
+    color: var(--color-secondary-text);
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-secondary-hover);
 }
 
 /* Container de Resultados */
@@ -132,7 +261,6 @@ button:hover {
     margin-bottom: 20px;
 }
 
-/* Custom scrollbar para Windows feel no dark mode */
 #resultado-lista::-webkit-scrollbar {
     width: 10px;
 }
@@ -140,11 +268,11 @@ button:hover {
     background: var(--input-bg);
 }
 #resultado-lista::-webkit-scrollbar-thumb {
-    background: #686868;
+    background: var(--border-color);
     border-radius: 4px;
 }
 #resultado-lista::-webkit-scrollbar-thumb:hover {
-    background: #9e9e9e;
+    background: var(--text-muted);
 }
 
 #resultado-lista li {
@@ -156,7 +284,7 @@ button:hover {
     border-bottom: none;
 }
 
-/* Informações Finais (Painel de Resumo) */
+/* Informações Finais */
 #informacoes-finais {
     background-color: var(--input-bg);
     border: 1px solid var(--border-color);
@@ -175,7 +303,6 @@ button:hover {
     margin-bottom: 0;
 }
 
-/* Classes utilitárias de cores */
 .text-primary {
     color: var(--color-primary);
     font-weight: bold;
